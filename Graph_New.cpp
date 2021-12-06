@@ -62,6 +62,7 @@ void printDfs(int src) {
 //----------------------------------------------------------------------------------------------------
 bool cycle_Detection_Undirected_Graph_BFS(int src) {
 	queue<pair<int, int>> q; 
+	vis[src] = true;
 	q.push({src, -1});
 
 	while(!q.empty()) {
@@ -121,7 +122,7 @@ bool bipartite_BFS(int src) {
 
 bool bipartite_DFS(int src) {
 	if(color[src] == -1) 	// color only when it is not colored before. 
-		color[src] = 0; 
+		color[src] = 1; 
 
 	for(int node : adj[src]) {
 		if(color[node] == -1) {
@@ -343,6 +344,38 @@ void dsu_unite(int a, int b) {
 bool dsu_same(int a, int b) {
 	return dsu_find(a) == dsu_find(b); 
 }
+
+// below version of DSU is not tested
+class DSU {
+	vector<int> root, siz;
+public:
+	DSU(int _n) {
+		root.resize(n);
+		siz.resize(n);
+		for(int i = 0; i < _n; i++) {
+			root[i] = i; 
+			siz[i] = 1; 
+		}
+	}
+	int find(int a){
+		while(root[a] != a) {
+			root[a] = root[root[a]];
+		}
+		return a; 
+	}
+	void unite(int a, int b) {
+		a = find(a);
+		b = find(b);
+		if(a != b) {
+			if(siz[a] < siz[b]) {
+				swap(a, b);
+			}
+			root[b] = a; 
+			siz[a] += siz[b];
+		}
+	}
+};
+
 //----------------------------------------------------------------------------------------------------
 // MINIMUM SPANNING TREE : KRUSKAL'S ALGORITHM 
 int kruskal() {
